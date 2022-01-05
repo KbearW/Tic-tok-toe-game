@@ -1,1 +1,1 @@
-This is a class Tic-Tac-Toe game run in python 3.8.
+This is a class Tic-Tac-Toe game that runs on python 3.8.
