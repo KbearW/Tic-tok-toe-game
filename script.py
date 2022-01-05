@@ -51,8 +51,10 @@ def setup_board():
     >>> setup_board()
     [['.', '.', '.'], ['.', '.', '.'], ['.', '.', '.']]
     """
+    # Shouldn't do it like this. this will cause error in moves!
+    # return [['.']*3]*3
+    return [['.', '.', '.'], ['.', '.', '.'], ['.', '.', '.']]
 
-    return [['.']*3]*3
 
 # is_board_full has been completed
 def is_board_full(board):
@@ -67,9 +69,9 @@ def is_board_full(board):
     >>> is_board_full([['X', 'O', 'X'], ['X', 'X', 'O'], ['O', 'O', 'O']])
     True
     """
-    for items in range(board):
-        for element in items:
-            if element =='.':
+    for row in board:
+        for col in range(3):
+            if row[col] =='.':
                 return False     
 
     return True
@@ -97,8 +99,9 @@ def make_random_move(board, player):
         for col in range(3):
             if board[row][col] == '.':
                 board[row][col] = player
-                print(row*3 + col + 1)
-    print('Board is full')
+                return row*3 + col + 1
+    raise Exception('No empty spot to play')
+    # print('Board is full')
 
 # find_winner has been completed
 def find_winner(bd):
@@ -117,32 +120,49 @@ def find_winner(bd):
     'O'
     """
     # check for rows
-    for row in range(3):
-        if bd[row][0] != '.' and bd[row][0] == bd[row][1] == bd[row][2]:
-            print(bd[row][0])
-            return
+    # for row in range(3):
+    #     if bd[row][0] != '.' and bd[row][0] == bd[row][1] == bd[row][2]:
+    #         # print(bd[row][0])
+    #         return bd[row][0]
         
-    # check for cols
-    for col in range(3) :
-        if bd[0][col] != '.' and bd[0][col] == bd[1][col] == bd[2][col]:
-            print(bd[0][col])
-            return
+    # # check for cols
+    # for col in range(3) :
+    #     if bd[0][col] != '.' and bd[0][col] == bd[1][col] == bd[2][col]:
+    #         # print(bd[0][col])
+    #         return bd[0][col]
         
-    # check for dias
-    # Left to right
+    # # check for dias
+    # # Left to right
+    # if bd[0][0] != '.' and bd[0][0] == bd[1][1] == bd[2][2]:
+    #     # print(bd[0][0])
+    #     return bd[0][0]
+    
+    # # right to left
+    # if bd[0][2] != '.' and bd[0][2] == bd[1][1] == bd[2][0]:
+    #     # print(bd[0][2])
+    #     return bd[0][2]
+    
+    # else:
+    #     # print('No winner')
+    #     return
+    for rowi in range(3):
+        if bd[rowi][0] != '.' and bd[rowi][0] == bd[rowi][1] == bd[rowi][2]:
+            return bd[rowi][0]
+
+    # Check for win in each col
+    for coli in range(3):
+        if bd[0][coli] != '.' and bd[0][coli] == bd[1][coli] == bd[2][coli]:
+            return bd[0][coli]
+
+    # Check for \ diagonal
     if bd[0][0] != '.' and bd[0][0] == bd[1][1] == bd[2][2]:
-        print(bd[0][0])
-        return
-    
-    # right to left
-    if bd[0][2] != '.' and bd[0][2] == bd[1][1] == bd[2][0]:
-        print(bd[0][2])
-        return
-    
-    else:
-        print('No winner')
-        return
-    
+        return bd[0][0]
+
+    # Check for / diagonal
+    if bd[2][0] != '.' and bd[2][0] == bd[1][1] == bd[0][2]:
+        return bd[2][0]
+    print('winner winner')
+
 # print_board has been completed
 def print_board(board):
     """Given a board[col][row], print it out.
@@ -177,13 +197,11 @@ def make_move(board, position, player):
     >>> board
     [['X', 'O', 'O'], ['X', 'O', 'O'], ['O', '.', 'X']]
     """
-    col, row = (position-1) // 3, (position-1) % 3
+    rowi, coli = (position-1) // 3, (position-1) % 3
+    
+    board[rowi][coli] = player
 
-    if board[col][row]=='.':
-        board[col][row] = player
-        print_board(board)
-    else:
-        print('Invalid position')
+
 
 
 if __name__ == "__main__":
